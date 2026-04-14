@@ -15,7 +15,15 @@
         "paths": {
             "@/*": [
                 "./src/*"
+            ],
+            "@backend/*": [
+                "../../backend/src/*"
             ]
         }
-    }
+    },
+    "references": [
+        {
+            "path": "../../backend/tsconfig.types.json"
+        }
+    ]
 }

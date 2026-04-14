@@ -1,0 +1,19 @@
+{
+    "name": "full-stack-template",
+    "version": "1.0.0",
+    "private": true,
+    "workspaces": [
+        "app/backend",
+        "app/frontend"
+    ],
+    "scripts": {
+        "install:all": "bun install --cwd app/backend && bun install --cwd app/frontend",
+        "types": "cd app/backend && bunx tsc -p tsconfig.types.json",
+        "dev:backend": "cd app/backend && bun dev",
+        "dev:frontend": "cd app/frontend && bun run dev",
+        "dev:types": "cd app/backend && bunx tsc -p tsconfig.types.json --watch --preserveWatchOutput",
+        "build:frontend": "cd app/frontend && bun run build",
+        "db:migrate": "cd app/backend && bun db:migrate",
+        "start": "cd app/backend && bun start"
+    }
+}

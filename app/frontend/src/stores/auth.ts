@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { login as apiLogin, register as apiRegister, getMe } from '@/api/auth'
-import { TOKEN_KEY } from '@/utils/request'
+import { TOKEN_KEY } from '@/lib/eden'
 import type { User, LoginForm, RegisterForm } from '@/types'
 
 export const useAuthStore = defineStore('auth', () => {

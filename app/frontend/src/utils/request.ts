@@ -1,29 +1,8 @@
-import axios, { type InternalAxiosRequestConfig, type AxiosResponse } from 'axios'
-import { ElMessage } from 'element-plus'
-import router from '@/router'
+// HTTP 客户端已迁移至 Elysia Eden（@/lib/eden）以获得端到端类型安全。
+// 此文件仅保留向后兼容的 TOKEN_KEY 重导出，方便未来扩展。
 
-const TOKEN_KEY = 'auth_token'
-
-// ─── Axios 实例 ───────────────────────────────────────────────────────────────
-
-const request = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL ?? '/api',
-    timeout: 15_000,
-    headers: { 'Content-Type': 'application/json' },
-})
-
-// ─── 请求拦截器：自动注入 Token ───────────────────────────────────────────────
-
-request.interceptors.request.use(
-    (config: InternalAxiosRequestConfig) => {
-        const token = localStorage.getItem(TOKEN_KEY)
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`
-        }
-        return config
-    },
-    (error) => Promise.reject(error),
-)
+// TOKEN_KEY 的实际定义位于 @/lib/eden，这里是重导出：
+export { TOKEN_KEY } from '@/lib/eden'
 
 // ─── 响应拦截器：统一错误处理 ─────────────────────────────────────────────────
 

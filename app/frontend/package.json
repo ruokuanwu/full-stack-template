@@ -5,12 +5,13 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vue-tsc && vite build",
+        "build": "vue-tsc --build && vite build",
         "preview": "vite preview",
-        "type-check": "vue-tsc --noEmit"
+        "type-check": "vue-tsc --build --noEmit"
     },
     "dependencies": {
-        "axios": "^1.7.9",
+        "@elysiajs/eden": "^1.2.0",
+        "elysia": "^1.2.25",
         "element-plus": "^2.9.1",
         "pinia": "^2.3.0",
         "vue": "^3.5.13",
