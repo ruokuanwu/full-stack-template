@@ -11,19 +11,14 @@
     "compilerOptions": {
         "composite": true,
         "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-        "baseUrl": ".",
         "paths": {
             "@/*": [
                 "./src/*"
             ],
             "@backend/*": [
-                "../../backend/src/*"
+                "../backend/src/*"
             ]
-        }
-    },
-    "references": [
-        {
-            "path": "../../backend/tsconfig.types.json"
-        }
-    ]
+        },
+        "skipLibCheck": true
+    }
 }

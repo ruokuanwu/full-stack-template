@@ -18,6 +18,17 @@ async function handleLogout() {
     ElMessage.success('已退出登录')
     router.push({ name: 'login' })
 }
+
+function handleCommand(command: string) {
+    if (command === 'profile') {
+        router.push({ name: 'profile' })
+        return
+    }
+
+    if (command === 'logout') {
+        void handleLogout()
+    }
+}
 </script>
 
 <template>
@@ -54,17 +65,6 @@ async function handleLogout() {
         </div>
     </div>
 </template>
-
-<script lang="ts">
-export default {
-    methods: {
-        handleCommand(command: string) {
-            if (command === 'profile') this.$router.push({ name: 'profile' })
-            else if (command === 'logout') this.handleLogout()
-        },
-    },
-}
-</script>
 
 <style scoped>
 .header-inner {

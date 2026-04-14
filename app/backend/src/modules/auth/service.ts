@@ -24,7 +24,7 @@ export interface RegisterInput {
     password: string
 }
 
-export interface RegisterResult {
+export type RegisterResult = {
     ok: true; user: User
 } | {
     ok: false; reason: 'email_taken' | 'username_taken'
@@ -61,7 +61,7 @@ export interface LoginInput {
     password: string
 }
 
-export interface LoginResult {
+export type LoginResult = {
     ok: true; user: User
 } | {
     ok: false; reason: 'user_not_found' | 'wrong_password' | 'account_inactive'

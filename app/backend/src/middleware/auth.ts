@@ -4,6 +4,22 @@ import { bearer } from '@elysiajs/bearer'
 import { config } from '@/config'
 import type { JWTPayload } from '@/types'
 
+function isValidPayload(payload: unknown): payload is {
+    sub: string
+    email: string
+    username: string
+    role: 'admin' | 'user'
+} {
+    if (!payload || typeof payload !== 'object') return false
+    const p = payload as Record<string, unknown>
+    return (
+        typeof p.sub === 'string'
+        && typeof p.email === 'string'
+        && typeof p.username === 'string'
+        && (p.role === 'admin' || p.role === 'user')
+    )
+}
+
 /**
  * 仅提供 jwt helper（sign/verify），供认证路由使用
  */
@@ -36,8 +52,18 @@ export const authGuard = new Elysia({ name: 'auth-guard' })
             throw new Error('Invalid or expired token')
         }
 
+        if (!isValidPayload(payload)) {
+            set.status = 401
+            throw new Error('Invalid token payload')
+        }
+
         return {
-            currentUser: payload as JWTPayload,
+            currentUser: {
+                sub: Number(payload.sub),
+                email: payload.email,
+                username: payload.username,
+                role: payload.role,
+            } as JWTPayload,
         }
     })
 
@@ -47,6 +73,11 @@ export const authGuard = new Elysia({ name: 'auth-guard' })
 export const adminGuard = new Elysia({ name: 'admin-guard' })
     .use(authGuard)
     .derive({ as: 'scoped' }, ({ currentUser, set }) => {
+        if (!currentUser) {
+            set.status = 401
+            throw new Error('Missing user context')
+        }
+
         if (currentUser.role !== 'admin') {
             set.status = 403
             throw new Error('Forbidden: admin only')

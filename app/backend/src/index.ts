@@ -47,7 +47,7 @@ const app = new Elysia()
 
     // ─ 全局错误处理 ───────────────────────────────────────────────────────────────
     .onError(({ error, set }) => {
-        const msg = error.message
+        const msg = error instanceof Error ? error.message : String(error)
 
         // 认证/授权错误
         if (msg.includes('Unauthorized') || msg.includes('Missing authorization')) {

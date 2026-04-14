@@ -29,7 +29,8 @@ export const loggerMiddleware = new Elysia({ name: 'logger-middleware' })
     .onError({ as: 'global' }, ({ request, error, set }) => {
         const status = set.status ?? 500
         const path = new URL(request.url).pathname
+        const message = error instanceof Error ? error.message : String(error)
         logger.error(`✗ ${request.method} ${path} ${status}`, {
-            message: error.message,
+            message,
         })
     })

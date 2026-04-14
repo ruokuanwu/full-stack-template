@@ -49,7 +49,7 @@ export const authModule = new Elysia({ prefix: '/auth' })
 
             const { user } = result
             const token = await jwt.sign({
-                sub: user.id,
+                sub: String(user.id),
                 email: user.email,
                 username: user.username,
                 role: user.role,

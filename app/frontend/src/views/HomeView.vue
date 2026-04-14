@@ -7,6 +7,10 @@ const authStore = useAuthStore()
 const appStore = useAppStore()
 
 onMounted(() => appStore.setPageTitle('Dashboard'))
+
+function openDocs() {
+    window.open('http://localhost:3000/docs', '_blank')
+}
 </script>
 
 <template>
@@ -59,8 +63,7 @@ onMounted(() => appStore.setPageTitle('Dashboard'))
                     @click="$router.push({ name: 'users' })">
                     用户管理
                 </el-button>
-                <el-button type="info" plain :icon="'Document'"
-                    @click="window.open('http://localhost:3000/docs', '_blank')">
+                <el-button type="info" plain :icon="'Document'" @click="openDocs">
                     API 文档
                 </el-button>
             </el-space>

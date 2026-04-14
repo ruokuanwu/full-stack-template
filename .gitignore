@@ -22,6 +22,8 @@ npm-debug.log*
 *.db
 *.sqlite
 *.sqlite3
+*.db-shm
+*.db-wal
 
 # OS files
 .DS_Store
@@ -35,3 +37,7 @@ Thumbs.db
 
 # Bun
 bun.lockb
+
+# Frontend generated typings
+app/frontend/src/auto-imports.d.ts
+app/frontend/src/components.d.ts

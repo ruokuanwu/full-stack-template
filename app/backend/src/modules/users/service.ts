@@ -64,7 +64,7 @@ export interface UpdateUserInput {
 
 export function updateUser(id: number, input: UpdateUserInput): User | null {
     const fields: string[] = []
-    const values: unknown[] = []
+    const values: Array<string | number> = []
     let idx = 1
 
     if (input.username !== undefined) { fields.push(`username = ?${idx++}`); values.push(input.username) }
@@ -78,7 +78,7 @@ export function updateUser(id: number, input: UpdateUserInput): User | null {
     values.push(id)
 
     const row = db
-        .query<UserRow, unknown[]>(
+        .query<UserRow, Array<string | number>>(
             `UPDATE users SET ${fields.join(', ')} WHERE id = ?${idx} RETURNING *`,
         )
         .get(...values)
