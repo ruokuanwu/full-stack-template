@@ -1,0 +1,89 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "dev:backend",
+            "type": "shell",
+            "command": "cd app/backend && bun dev",
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "group": "dev"
+            }
+        },
+        {
+            "label": "dev:frontend",
+            "type": "shell",
+            "command": "cd app/frontend && bun run dev",
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "group": "dev"
+            }
+        },
+        {
+            "label": "dev:types",
+            "type": "shell",
+            "command": "cd app/backend && bunx tsc -p tsconfig.types.json --watch --preserveWatchOutput",
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": [
+                "$tsc-watch"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "group": "dev"
+            }
+        },
+        {
+            "label": "dev:all",
+            "dependsOn": [
+                "dev:backend",
+                "dev:types",
+                "dev:frontend"
+            ],
+            "dependsOrder": "parallel",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "install",
+            "type": "shell",
+            "command": "make install",
+            "problemMatcher": []
+        },
+        {
+            "label": "types",
+            "type": "shell",
+            "command": "make types",
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "make build",
+            "group": "build",
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
+            "label": "db:migrate",
+            "type": "shell",
+            "command": "make db-migrate",
+            "problemMatcher": []
+        }
+    ]
+}

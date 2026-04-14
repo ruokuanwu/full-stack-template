@@ -2,6 +2,7 @@
 
 BACKEND_DIR  := app/backend
 FRONTEND_DIR := app/frontend
+DEPLOY_DIR   := deploy
 
 GREEN  := \033[0;32m
 YELLOW := \033[0;33m
@@ -13,7 +14,8 @@ RESET  := \033[0m
 .DEFAULT_GOAL := help
 
 .PHONY: help install types dev build start clean db-migrate \
-        dev-backend dev-frontend dev-types
+        dev-backend dev-frontend dev-types \
+        docker-build docker-up docker-down docker-logs docker-clean
 
 # ─── 帮助 ──────────────────────────────────────────────────────────────────────
 
@@ -21,14 +23,24 @@ help:
 	@echo ""
 	@echo "$(CYAN)Full Stack Template$(RESET)  (Vue + Vite + ElementPlus + Bun + Elysia)"
 	@echo ""
-	@echo "$(GREEN)Usage:$(RESET)"
+	@echo "$(GREEN)开发:$(RESET)"
 	@echo "  make install      安装前后端所有依赖"
 	@echo "  make types        生成后端 .d.ts 类型声明（Eden 类型推断需要此步骤）"
 	@echo "  make dev          同时启动后端、前端和类型监听（开发模式）"
+	@echo "  make dev-backend  仅启动后端"
+	@echo "  make dev-frontend 仅启动前端"
+	@echo "  make dev-types    仅启动类型监听"
 	@echo "  make build        构建前端生产产物"
 	@echo "  make start        生产模式启动后端"
 	@echo "  make db-migrate   运行数据库迁移"
 	@echo "  make clean        清理构建产物"
+	@echo ""
+	@echo "$(GREEN)Docker:$(RESET)"
+	@echo "  make docker-build 构建 Docker 镜像"
+	@echo "  make docker-up    启动 Docker 容器（后台）"
+	@echo "  make docker-down  停止并移除 Docker 容器"
+	@echo "  make docker-logs  查看 Docker 容器日志"
+	@echo "  make docker-clean 停止容器并清理镜像和数据卷"
 	@echo ""
 
 # ─── 安装 ──────────────────────────────────────────────────────────────────────

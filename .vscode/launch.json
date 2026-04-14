@@ -1,0 +1,45 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Backend (Bun)",
+            "type": "bun",
+            "request": "launch",
+            "program": "${workspaceFolder}/app/backend/src/index.ts",
+            "cwd": "${workspaceFolder}/app/backend",
+            "env": {
+                "NODE_ENV": "development",
+                "LOG_LEVEL": "debug"
+            },
+            "watchMode": true,
+            "stopOnEntry": false
+        },
+        {
+            "name": "Frontend (Chrome)",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/app/frontend/src",
+            "sourceMapPathOverrides": {
+                "webpack:///./src/*": "${webRoot}/*"
+            }
+        },
+        {
+            "name": "DB Migrate (Bun)",
+            "type": "bun",
+            "request": "launch",
+            "program": "${workspaceFolder}/app/backend/src/db/migrate.ts",
+            "cwd": "${workspaceFolder}/app/backend"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Full Stack Debug",
+            "configurations": [
+                "Backend (Bun)",
+                "Frontend (Chrome)"
+            ],
+            "stopAll": true
+        }
+    ]
+}

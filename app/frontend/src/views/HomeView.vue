@@ -32,22 +32,22 @@ function openDocs() {
         <el-row :gutter="16" class="stat-row">
             <el-col :xs="24" :sm="12" :lg="6">
                 <el-card class="stat-card">
-                    <el-statistic title="技术栈" value="Vue 3" />
+                    <el-statistic title="技术栈" />
                 </el-card>
             </el-col>
             <el-col :xs="24" :sm="12" :lg="6">
                 <el-card class="stat-card">
-                    <el-statistic title="运行时" value="Bun" />
+                    <el-statistic title="运行时" />
                 </el-card>
             </el-col>
             <el-col :xs="24" :sm="12" :lg="6">
                 <el-card class="stat-card">
-                    <el-statistic title="框架" value="Elysia" />
+                    <el-statistic title="框架" />
                 </el-card>
             </el-col>
             <el-col :xs="24" :sm="12" :lg="6">
                 <el-card class="stat-card">
-                    <el-statistic title="数据库" value="SQLite" />
+                    <el-statistic title="数据库" />
                 </el-card>
             </el-col>
         </el-row>
