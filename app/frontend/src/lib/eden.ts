@@ -1,15 +1,16 @@
-import { treaty } from '@elysiajs/eden'
+import { treaty, type Treaty } from '@elysiajs/eden'
 import { ElMessage } from 'element-plus'
+import type { App } from '../../../shared/backend-app'
 
 export const TOKEN_KEY = 'auth_token'
 
 // ─── Eden Treaty 客户端 ───────────────────────────────────────────────────────
-// 这里使用宽松泛型，避免前端构建强耦合后端 TypeScript 项目配置。
+// 使用后端编译产出的 .d.ts 声明，提供完整路由与参数类型推导。
 
 const apiBase = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000')
     .replace(/^https?:\/\//, '') // treaty 只接受 host:port 格式
 
-export const eden: any = treaty<any>(apiBase, {
+export const eden: Treaty.Create<App> = treaty<App>(apiBase, {
     // 每次请求动态读取 Token，确保登出后立即生效
     headers() {
         const token = localStorage.getItem(TOKEN_KEY)
