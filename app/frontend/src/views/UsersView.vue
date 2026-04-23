@@ -3,7 +3,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useAppStore } from '@/stores/app'
 import { getUsers, deleteUser } from '@/api/user'
-import type { User, PaginationParams } from '@/types'
+import type { User } from '@/types'
 
 const appStore = useAppStore()
 onMounted(() => appStore.setPageTitle('用户管理'))
@@ -12,7 +12,7 @@ onMounted(() => appStore.setPageTitle('用户管理'))
 const loading = ref(false)
 const userList = ref<User[]>([])
 const total = ref(0)
-const query = reactive<PaginationParams>({
+const query = reactive({
     page: 1,
     pageSize: 20,
     keyword: '',

@@ -1,29 +1,10 @@
 import { eden, normalizeEden } from '@/lib/eden'
-import type { ApiResponse, AuthToken, LoginForm, RegisterForm, User } from '@/types'
 
-/**
- * 注册
- * Eden 自动推导请求体类型来自后端 RegisterDto，响应类型来自路由返回值
- */
-export async function register(
-    data: Omit<RegisterForm, 'confirmPassword'>,
-): Promise<{ data: ApiResponse<User> }> {
-    const res = await eden.auth.register.post(data)
-    return normalizeEden<ApiResponse<User>>(res as never)
-}
+export const register = async (data: Parameters<typeof eden.auth.register.post>[0]) =>
+    normalizeEden(await eden.auth.register.post(data))
 
-/**
- * 登录
- */
-export async function login(data: LoginForm): Promise<{ data: ApiResponse<AuthToken> }> {
-    const res = await eden.auth.login.post(data)
-    return normalizeEden<ApiResponse<AuthToken>>(res as never)
-}
+export const login = async (data: Parameters<typeof eden.auth.login.post>[0]) =>
+    normalizeEden(await eden.auth.login.post(data))
 
-/**
- * 获取当前登录用户信息
- */
-export async function getMe(): Promise<{ data: ApiResponse<User> }> {
-    const res = await eden.auth.me.get()
-    return normalizeEden<ApiResponse<User>>(res as never)
-}
+export const getMe = async () =>
+    normalizeEden(await eden.auth.me.get())

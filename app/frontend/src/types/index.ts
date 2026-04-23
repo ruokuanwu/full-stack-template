@@ -1,16 +1,16 @@
-// ─── 用户相关 ─────────────────────────────────────────────────────────────────
+import type { eden } from '@/lib/eden'
 
-export interface User {
-    id: number
-    username: string
-    email: string
-    role: 'admin' | 'user'
-    isActive: boolean
-    createdAt: string
-    updatedAt: string
-}
+// ─── 从 Eden 推断后端模型类型 ────────────────────────────────────────────────────
+// User 类型从 /users 列表端点的成功响应中提取，与后端 UserResponseDto 保持同步
 
-// ─── 认证相关 ─────────────────────────────────────────────────────────────────
+type _UsersListSuccess = Extract<
+    NonNullable<Awaited<ReturnType<typeof eden.users.get>>['data']>,
+    { success: true }
+>
+export type User = _UsersListSuccess['data'][number]
+
+// ─── UI 专属表单类型 ────────────────────────────────────────────────────────────
+// confirmPassword 仅用于前端校验，不发送给后端
 
 export interface LoginForm {
     email: string
@@ -22,35 +22,4 @@ export interface RegisterForm {
     email: string
     password: string
     confirmPassword: string
-}
-
-export interface AuthToken {
-    token: string
-    expiresIn: string
-    user: Pick<User, 'id' | 'username' | 'email' | 'role'>
-}
-
-// ─── API 响应 ─────────────────────────────────────────────────────────────────
-
-export interface ApiResponse<T = unknown> {
-    success: boolean
-    message: string
-    data?: T
-}
-
-export interface PaginatedResponse<T = unknown> {
-    success: boolean
-    message: string
-    data: T[]
-    total: number
-    page: number
-    pageSize: number
-}
-
-// ─── 查询参数 ─────────────────────────────────────────────────────────────────
-
-export interface PaginationParams {
-    page?: number
-    pageSize?: number
-    keyword?: string
 }

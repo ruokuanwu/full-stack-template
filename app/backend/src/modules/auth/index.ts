@@ -5,10 +5,10 @@ import { registerUser, loginUser, getUserById } from './service'
 import {
     LoginRequestDto,
     LoginResponseDto,
-    AuthUserResponseDto,
     RegisterRequestDto,
     RegisterResponseDto,
 } from './dto'
+import { UserResponseDto } from '@/modules/users/dto'
 
 import { config } from '@/config'
 import { fail, success } from '@/utils/response'
@@ -95,7 +95,7 @@ export const authModule = new Elysia({ prefix: '/auth' })
         return success(user)
     }, {
         response: {
-            200: createSuccessResponseDto(AuthUserResponseDto),
+            200: createSuccessResponseDto(UserResponseDto),
             404: FailureResponseDto,
         },
     })
