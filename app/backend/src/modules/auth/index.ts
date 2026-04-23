@@ -2,7 +2,7 @@ import { Elysia } from 'elysia'
 import { jwtPlugin } from '@/middleware/auth'
 import { authGuard } from '@/middleware/auth'
 import { registerUser, loginUser, getUserById } from './service'
-import { LoginDto, RegisterDto } from './dto'
+import { LoginRequestDto, RegisterRequestDto } from './dto'
 import { success, fail } from '@/utils/response'
 import { config } from '@/config'
 
@@ -33,7 +33,7 @@ export const authModule = new Elysia({ prefix: '/auth' })
                 'Registration successful',
             )
         },
-        { body: RegisterDto },
+        { body: RegisterRequestDto },
     )
 
     // ── 登录 ────────────────────────────────────────────────────────────────────
@@ -64,7 +64,7 @@ export const authModule = new Elysia({ prefix: '/auth' })
                 'Login successful',
             )
         },
-        { body: LoginDto },
+        { body: LoginRequestDto },
     )
 
     // ── 获取当前用户信息（需要认证） ─────────────────────────────────────────────

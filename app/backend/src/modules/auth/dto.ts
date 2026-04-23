@@ -1,33 +1,39 @@
 import { t } from 'elysia'
 
-// ─── 请求体 ───────────────────────────────────────────────────────────────────
-
-export const RegisterDto = t.Object({
+export const RegisterRequestDto = t.Object({
     username: t.String({ minLength: 3, maxLength: 32, pattern: '^[a-zA-Z0-9_]+$' }),
     email: t.String({ format: 'email' }),
     password: t.String({ minLength: 8, maxLength: 72 }),
 })
 
-export const LoginDto = t.Object({
+export const LoginRequestDto = t.Object({
     email: t.String({ format: 'email' }),
     password: t.String({ minLength: 1 }),
 })
 
-// ─── 响应体 ───────────────────────────────────────────────────────────────────
-
-export const AuthTokenResponse = t.Object({
-    success: t.Boolean(),
-    message: t.String(),
-    data: t.Optional(
-        t.Object({
-            token: t.String(),
-            expiresIn: t.String(),
-            user: t.Object({
-                id: t.Number(),
-                username: t.String(),
-                email: t.String(),
-                role: t.String(),
-            }),
-        }),
-    ),
+export const AuthUserResponseDto = t.Object({
+    id: t.Number(),
+    username: t.String(),
+    email: t.String(),
+    role: t.Union([t.Literal('admin'), t.Literal('user')]),
 })
+
+export const LoginResponseDto = t.Object({
+    token: t.String(),
+    expiresIn: t.String(),
+    user: AuthUserResponseDto,
+})
+
+export const RegisterResponseDto = t.Object({
+    id: t.Number(),
+    username: t.String(),
+    email: t.String(),
+    role: t.Union([t.Literal('admin'), t.Literal('user')]),
+    createdAt: t.String(),
+})
+
+export type RegisterRequest = typeof RegisterRequestDto.static
+export type LoginRequest = typeof LoginRequestDto.static
+export type AuthUserResponse = typeof AuthUserResponseDto.static
+export type LoginResponse = typeof LoginResponseDto.static
+export type RegisterResponse = typeof RegisterResponseDto.static

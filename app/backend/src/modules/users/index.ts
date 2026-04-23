@@ -8,7 +8,12 @@ import {
     changePassword,
     deleteUser,
 } from './service'
-import { UpdateUserDto, ChangePasswordDto, UserIdParam, PaginationQuery } from './dto'
+import {
+    ChangePasswordRequestDto,
+    ListUsersRequestDto,
+    UpdateUserRequestDto,
+    UserIdRequestDto,
+} from './dto'
 
 export const usersModule = new Elysia({ prefix: '/users' })
     .use(authGuard)
@@ -24,7 +29,7 @@ export const usersModule = new Elysia({ prefix: '/users' })
             const { items, total } = listUsers(query)
             return paginated(items, total, query.page ?? 1, query.pageSize ?? 20)
         },
-        { query: PaginationQuery },
+        { query: ListUsersRequestDto },
     )
 
     // ── 获取单个用户（自己或管理员） ──────────────────────────────────────────────
@@ -39,7 +44,7 @@ export const usersModule = new Elysia({ prefix: '/users' })
             if (!user) { set.status = 404; return fail('User not found') }
             return success(user)
         },
-        { params: UserIdParam },
+        { params: UserIdRequestDto },
     )
 
     // ── 更新用户（自己或管理员） ──────────────────────────────────────────────────
@@ -61,7 +66,7 @@ export const usersModule = new Elysia({ prefix: '/users' })
             if (!user) { set.status = 404; return fail('User not found') }
             return success(user, 'User updated')
         },
-        { params: UserIdParam, body: UpdateUserDto },
+        { params: UserIdRequestDto, body: UpdateUserRequestDto },
     )
 
     // ── 修改密码（仅本人） ────────────────────────────────────────────────────────
@@ -70,14 +75,14 @@ export const usersModule = new Elysia({ prefix: '/users' })
         async ({ currentUser, params, body, set }) => {
             if (currentUser.sub !== params.id) { set.status = 403; return fail('Forbidden') }
 
-            const result = await changePassword(params.id, body.currentPassword, body.newPassword)
+            const result = await changePassword(params.id, body)
             if (!result.ok) {
                 set.status = 400
                 return fail(result.reason === 'wrong_password' ? 'Current password is incorrect' : 'User not found')
             }
             return success(null, 'Password changed')
         },
-        { params: UserIdParam, body: ChangePasswordDto },
+        { params: UserIdRequestDto, body: ChangePasswordRequestDto },
     )
 
     // ── 删除用户（仅管理员） ──────────────────────────────────────────────────────
@@ -91,5 +96,5 @@ export const usersModule = new Elysia({ prefix: '/users' })
             if (!ok) { set.status = 404; return fail('User not found') }
             return success(null, 'User deleted')
         },
-        { params: UserIdParam },
+        { params: UserIdRequestDto },
     )

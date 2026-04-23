@@ -1,40 +1,40 @@
-// ─── 数据库实体类型 ───────────────────────────────────────────────────────────
+import { t } from 'elysia'
 
-export interface UserRow {
-    id: number
-    username: string
-    email: string
-    password_hash: string
-    role: 'admin' | 'user'
-    is_active: number // SQLite 存 0/1
-    created_at: string
-    updated_at: string
-}
+export const PaginationRequestDto = t.Object({
+    page: t.Optional(t.Numeric({ minimum: 1, default: 1 })),
+    pageSize: t.Optional(t.Numeric({ minimum: 1, maximum: 100, default: 20 })),
+})
 
-// ─── 业务层类型（不含敏感字段） ───────────────────────────────────────────────
+export const SuccessResponseDto = t.Object({
+    success: t.Boolean(),
+    message: t.String(),
+    data: t.Optional(t.Any()),
+})
 
-export interface User {
-    id: number
-    username: string
-    email: string
-    role: 'admin' | 'user'
-    isActive: boolean
-    createdAt: string
-    updatedAt: string
-}
+export const FailureResponseDto = t.Object({
+    success: t.Boolean(),
+    message: t.String(),
+})
 
-// ─── JWT ─────────────────────────────────────────────────────────────────────
+export type PaginationRequest = typeof PaginationRequestDto.static
+
+export const JwtTokenRequestDto = t.Object({
+    sub: t.Number(),
+    email: t.String(),
+    username: t.String(),
+    role: t.Union([t.Literal('admin'), t.Literal('user')]),
+    iat: t.Optional(t.Number()),
+    exp: t.Optional(t.Number()),
+})
 
 export interface JWTPayload {
-    sub: number   // user id
+    sub: number
     email: string
     username: string
     role: 'admin' | 'user'
     iat?: number
     exp?: number
 }
-
-// ─── API 通用响应 ─────────────────────────────────────────────────────────────
 
 export interface ApiResponse<T = unknown> {
     success: boolean
@@ -46,11 +46,4 @@ export interface PaginatedResponse<T = unknown> extends ApiResponse<T[]> {
     total: number
     page: number
     pageSize: number
-}
-
-// ─── 分页查询参数 ─────────────────────────────────────────────────────────────
-
-export interface PaginationQuery {
-    page?: number
-    pageSize?: number
 }
