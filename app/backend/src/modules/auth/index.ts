@@ -9,9 +9,10 @@ import {
     RegisterRequestDto,
     RegisterResponseDto,
 } from './dto'
-import { success, fail } from '@/utils/response'
-import { FailureResponseDto, createSuccessResponseDto } from '@/types'
+
 import { config } from '@/config'
+import { fail, success } from '@/utils/response'
+import { createSuccessResponseDto, FailureResponseDto } from '@/types'
 
 export const authModule = new Elysia({ prefix: '/auth' })
     // ── 注册 ────────────────────────────────────────────────────────────────────

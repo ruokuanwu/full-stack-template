@@ -1,6 +1,6 @@
 import { Elysia, t } from 'elysia'
 import { authGuard } from '@/middleware/auth'
-import { success, fail, paginated } from '@/utils/response'
+
 import {
     listUsers,
     getUserById,
@@ -17,21 +17,19 @@ import {
 } from './dto'
 import {
     FailureResponseDto,
-    createPaginatedResponseDto,
     createSuccessResponseDto,
+    createPaginatedResponseDto,
 } from '@/types'
+import { fail, success, paginated } from '@/utils/response'
 
 export const usersModule = new Elysia({ prefix: '/users' })
     .use(authGuard)
 
-    // ── 列表（仅管理员） ──────────────────────────────────────────────────────────
+    // ── 获取用户列表（仅管理员） ──────────────────────────────────────────────────
     .get(
         '/',
         ({ currentUser, query, set }) => {
-            if (currentUser.role !== 'admin') {
-                set.status = 403
-                return fail('Forbidden')
-            }
+            if (currentUser.role !== 'admin') { set.status = 403; return fail('Forbidden') }
             const { items, total } = listUsers(query)
             return paginated(items, total, query.page ?? 1, query.pageSize ?? 20)
         },

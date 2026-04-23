@@ -9,6 +9,7 @@ import { usersModule } from '@/modules/users'
 import { logger } from '@/utils/logger'
 import { fail } from '@/utils/response'
 
+
 // ── 初始化数据库 ────────────────────────────────────────────────────────────────
 runMigrations()
 
