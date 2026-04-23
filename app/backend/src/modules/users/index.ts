@@ -1,4 +1,4 @@
-import { Elysia } from 'elysia'
+import { Elysia, t } from 'elysia'
 import { authGuard } from '@/middleware/auth'
 import { success, fail, paginated } from '@/utils/response'
 import {
@@ -13,7 +13,13 @@ import {
     ListUsersRequestDto,
     UpdateUserRequestDto,
     UserIdRequestDto,
+    UserResponseDto,
 } from './dto'
+import {
+    FailureResponseDto,
+    createPaginatedResponseDto,
+    createSuccessResponseDto,
+} from '@/types'
 
 export const usersModule = new Elysia({ prefix: '/users' })
     .use(authGuard)
@@ -29,7 +35,13 @@ export const usersModule = new Elysia({ prefix: '/users' })
             const { items, total } = listUsers(query)
             return paginated(items, total, query.page ?? 1, query.pageSize ?? 20)
         },
-        { query: ListUsersRequestDto },
+        {
+            query: ListUsersRequestDto,
+            response: {
+                200: createPaginatedResponseDto(UserResponseDto),
+                403: FailureResponseDto,
+            },
+        },
     )
 
     // ── 获取单个用户（自己或管理员） ──────────────────────────────────────────────
@@ -44,7 +56,14 @@ export const usersModule = new Elysia({ prefix: '/users' })
             if (!user) { set.status = 404; return fail('User not found') }
             return success(user)
         },
-        { params: UserIdRequestDto },
+        {
+            params: UserIdRequestDto,
+            response: {
+                200: createSuccessResponseDto(UserResponseDto),
+                403: FailureResponseDto,
+                404: FailureResponseDto,
+            },
+        },
     )
 
     // ── 更新用户（自己或管理员） ──────────────────────────────────────────────────
@@ -66,7 +85,15 @@ export const usersModule = new Elysia({ prefix: '/users' })
             if (!user) { set.status = 404; return fail('User not found') }
             return success(user, 'User updated')
         },
-        { params: UserIdRequestDto, body: UpdateUserRequestDto },
+        {
+            params: UserIdRequestDto,
+            body: UpdateUserRequestDto,
+            response: {
+                200: createSuccessResponseDto(UserResponseDto),
+                403: FailureResponseDto,
+                404: FailureResponseDto,
+            },
+        },
     )
 
     // ── 修改密码（仅本人） ────────────────────────────────────────────────────────
@@ -82,7 +109,15 @@ export const usersModule = new Elysia({ prefix: '/users' })
             }
             return success(null, 'Password changed')
         },
-        { params: UserIdRequestDto, body: ChangePasswordRequestDto },
+        {
+            params: UserIdRequestDto,
+            body: ChangePasswordRequestDto,
+            response: {
+                200: createSuccessResponseDto(t.Null()),
+                400: FailureResponseDto,
+                403: FailureResponseDto,
+            },
+        },
     )
 
     // ── 删除用户（仅管理员） ──────────────────────────────────────────────────────
@@ -96,5 +131,13 @@ export const usersModule = new Elysia({ prefix: '/users' })
             if (!ok) { set.status = 404; return fail('User not found') }
             return success(null, 'User deleted')
         },
-        { params: UserIdRequestDto },
+        {
+            params: UserIdRequestDto,
+            response: {
+                200: createSuccessResponseDto(t.Null()),
+                400: FailureResponseDto,
+                403: FailureResponseDto,
+                404: FailureResponseDto,
+            },
+        },
     )

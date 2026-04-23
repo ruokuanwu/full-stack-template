@@ -7,8 +7,14 @@ export const TOKEN_KEY = 'auth_token'
 // ─── Eden Treaty 客户端 ───────────────────────────────────────────────────────
 // 使用后端编译产出的 .d.ts 声明，提供完整路由与参数类型推导。
 
-const apiBase = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000')
-    .replace(/^https?:\/\//, '') // treaty 只接受 host:port 格式
+// 优先使用显式配置的后端地址（直连模式）；否则走同源 /api 前缀，
+// 由 Vite dev proxy（开发）或 nginx（生产）转发，兼容远程开发环境。
+const rawBase = import.meta.env.VITE_API_BASE_URL
+const apiBase = rawBase
+    ? rawBase.replace(/^https?:\/\//, '') // 去掉协议头，treaty 会自动补 http://
+    : typeof window !== 'undefined'
+        ? `${window.location.host}/api`     // 走代理：localhost:5173/api → localhost:3000
+        : 'localhost:3000'                  // SSR / Node 环境兜底
 
 export const eden: Treaty.Create<App> = treaty<App>(apiBase, {
     // 每次请求动态读取 Token，确保登出后立即生效

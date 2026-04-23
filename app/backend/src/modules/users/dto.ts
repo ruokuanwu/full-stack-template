@@ -39,12 +39,3 @@ export type UpdateUserRequest = typeof UpdateUserRequestDto.static
 export type ChangePasswordRequest = typeof ChangePasswordRequestDto.static
 export type UserIdRequest = typeof UserIdRequestDto.static
 export type ListUsersRequest = typeof ListUsersRequestDto.static
-
-export const ListUsersResponseDto = t.Object({
-    items: t.Array(UserResponseDto),
-    total: t.Number(),
-    page: t.Number(),
-    pageSize: t.Number(),
-})
-
-export type ListUsersResponse = typeof ListUsersResponseDto.static

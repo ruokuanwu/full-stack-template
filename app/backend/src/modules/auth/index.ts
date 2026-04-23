@@ -2,8 +2,15 @@ import { Elysia } from 'elysia'
 import { jwtPlugin } from '@/middleware/auth'
 import { authGuard } from '@/middleware/auth'
 import { registerUser, loginUser, getUserById } from './service'
-import { LoginRequestDto, RegisterRequestDto } from './dto'
+import {
+    LoginRequestDto,
+    LoginResponseDto,
+    AuthUserResponseDto,
+    RegisterRequestDto,
+    RegisterResponseDto,
+} from './dto'
 import { success, fail } from '@/utils/response'
+import { FailureResponseDto, createSuccessResponseDto } from '@/types'
 import { config } from '@/config'
 
 export const authModule = new Elysia({ prefix: '/auth' })
@@ -33,7 +40,13 @@ export const authModule = new Elysia({ prefix: '/auth' })
                 'Registration successful',
             )
         },
-        { body: RegisterRequestDto },
+        {
+            body: RegisterRequestDto,
+            response: {
+                201: createSuccessResponseDto(RegisterResponseDto),
+                409: FailureResponseDto,
+            },
+        },
     )
 
     // ── 登录 ────────────────────────────────────────────────────────────────────
@@ -64,7 +77,13 @@ export const authModule = new Elysia({ prefix: '/auth' })
                 'Login successful',
             )
         },
-        { body: LoginRequestDto },
+        {
+            body: LoginRequestDto,
+            response: {
+                200: createSuccessResponseDto(LoginResponseDto),
+                401: FailureResponseDto,
+            },
+        },
     )
 
     // ── 获取当前用户信息（需要认证） ─────────────────────────────────────────────
@@ -73,4 +92,9 @@ export const authModule = new Elysia({ prefix: '/auth' })
         const user = getUserById(currentUser.sub)
         if (!user) return fail('User not found')
         return success(user)
+    }, {
+        response: {
+            200: createSuccessResponseDto(AuthUserResponseDto),
+            404: FailureResponseDto,
+        },
     })
